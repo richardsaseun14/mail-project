@@ -2,7 +2,7 @@
 import Checkbox from "./Checkbox.vue";
 import ItemMail from "./ItemMail.vue";
 import ModalMail from "./ModalMail.vue";
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   props: {
@@ -16,7 +16,7 @@ export default {
     ModalMail,
   },
   data() {
-    return {};
+    return { showModal: false, idx: undefined };
   },
 
   computed: {
@@ -27,15 +27,19 @@ export default {
 
       return tmp;
     },
-    ...mapState({
-      mails: (state) => state.mails,
-    }),
+    mails() {
+      return this.$store.getters.getMails(this.variant);
+    },
+    // ...mapGetters({
+    //   mails: "getMails",
+    // }),
   },
   methods: {
-    greet() {
-      console.log("here");
+    openModal(id) {
+      this.idx = id;
+      this.showModal = true;
     },
-    ...mapMutations(["toggleCheck"]),
+    ...mapMutations(["toggleCheck", "toggleAll"]),
   },
 };
 </script>
@@ -45,7 +49,7 @@ export default {
     <h3 class="layout__title">{{ computedTitle }}</h3>
     <h2 class="layout__subtitle">Emails selected</h2>
     <div class="layout__actions">
-      <Checkbox></Checkbox>
+      <Checkbox @changed="toggleAll({ value: $event, variant })"></Checkbox>
       <button class="button button--position-first">Mark as read (r)</button>
       <button class="button">Archive (a)</button>
     </div>
@@ -53,12 +57,16 @@ export default {
     <ItemMail
       v-for="mail in mails"
       :key="mail.id"
-      @clickHandler="greet"
+      @clickHandler="openModal"
       v-bind="mail"
       @check="({ id, value }) => toggleCheck({ id, value })"
     ></ItemMail>
 
-    <ModalMail></ModalMail>
+    <ModalMail
+      :isShow="showModal"
+      @closeModal="showModal = $event"
+      v-bind="mails[mails.findIndex((el) => el.id === idx)]"
+    ></ModalMail>
   </div>
 </template>
 

@@ -5,49 +5,62 @@ const store = createStore({
     return {
       mails: [
         {
-          title: "title",
+          title: "Your 7-figure plan goes byebye at midnight",
           message: "message",
           id: 1,
           checked: false,
           location: "inbox",
+          isRead: false,
         },
         {
-          title: "title2",
+          title: "Get this now before",
           message: "message 2",
           id: 2,
           checked: false,
           location: "inbox",
+          isRead: false,
         },
         {
-          title: "title3",
+          title: "Wow, your prescription is finished",
           message: "message 3",
           id: 3,
           checked: false,
           location: "inbox",
+          isRead: true,
+        },
+        {
+          title: "Wow, your prescription is ready",
+          message: "message 3",
+          id: 4,
+          checked: false,
+          location: "archive",
+          isRead: true,
         },
       ],
-      selected: [],
     };
   },
   mutations: {
-    toggleCheck(state, { id, value }) {
-      console.log("🚀 ~ toggleCheck ~ value", value);
-      console.log("🚀 ~ toggleCheck ~ id", id);
+    toggleCheck(state, { id }) {
       const idx = state.mails.findIndex((el) => el.id === id);
-      if (value) {
-        state.selected = [idx, ...state.selected];
-      } else {
-        const tmp = state.sele;
-        state;
-      }
-      // state.mails[idx].checked = !state.mails[idx].checked;
-      // state.selected = [];
+      state.mails[idx].checked = !state.mails[idx].checked;
     },
-  },
-  actions: {
-    // toggleCheck(context, id) {
-    //   context.commit();
+    toggleAll(state, { value, variant }) {
+      state.mails = state.mails.map((el) => {
+        if (el.location === variant) {
+          return { ...el, checked: value };
+        } else {
+          return { ...el };
+        }
+      });
+    },
+    // toggleAll(state, value) {
+    //   state.mails.map((el) => (el.checked = value));
     // },
+  },
+  getters: {
+    getMails: (state) => (variant) => {
+      return state.mails.filter((el) => el.location === variant);
+    },
   },
 });
 

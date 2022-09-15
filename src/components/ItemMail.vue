@@ -13,6 +13,9 @@ export default {
     checked: {
       type: Boolean,
     },
+    isRead: {
+      type: Boolean,
+    },
   },
 
   components: {
@@ -28,9 +31,13 @@ export default {
 </script>
 
 <template>
-  <div class="mail-item">
+  <div
+    class="mail-item"
+    :class="{ 'mail-item--isRead': isRead }"
+    @click.self="$emit('clickHandler', id)"
+  >
     <Checkbox :value="checked" @changed="changeHandler"></Checkbox>
-    <span @click="$emit('clickHandler')" class="mail-item__title">{{
+    <span @click="$emit('clickHandler', id)" class="mail-item__title">{{
       title
     }}</span>
   </div>
@@ -38,6 +45,7 @@ export default {
 
 <style>
 .mail-item {
+  cursor: pointer;
   padding: 15px;
   border: 1px solid #969595;
   margin-bottom: 16px;
@@ -48,5 +56,9 @@ export default {
 
 .mail-item__title {
   margin-left: 12px;
+}
+
+.mail-item--isRead {
+  opacity: 0.5;
 }
 </style>

@@ -1,25 +1,77 @@
-<script setup>
-import Checkbox from "./Checkbox.vue";
+<script>
+export default {
+  props: {
+    title: {
+      type: String,
+    },
+    message: {
+      type: String,
+    },
+    id: {
+      type: String,
+    },
+    isShow: { type: Boolean },
+  },
+
+  methods: {
+    closeModal() {
+      this.$emit("closeModal", false);
+    },
+  },
+};
 </script>
 
 <template>
-  <div @click="$emit('clickHandler')" class="mail-item">
-    <Checkbox></Checkbox>
-    <span class="mail-item__title">fjdnjdsfnksjdnfksjdnfsf</span>
+  <div v-if="isShow" class="modal">
+    <div class="modal__overlay" @click="closeModal"></div>
+    <div class="modal__content">
+      <a class="modal__close" @click="closeModal">Close (Esc)</a>
+      <div class="modal__content-actions">
+        <button class="button button--position-first">Mark as read (r)</button>
+        <button class="button">Archive (a)</button>
+      </div>
+      <div class="">
+        <h4 class="modal__content-title">{{ title }}</h4>
+        <p class="modal__content-message">{{ message }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
-.mail-item {
-  padding: 15px;
-  border: 1px solid #969595;
-  margin-bottom: 16px;
-  border-radius: 4px;
-  width: 100%;
-  background-color: #f1f1f1;
+.modal {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #33333337;
+  display: flex;
+}
+.modal__close {
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.mail-item__title {
-  margin-left: 12px;
+.modal__overlay {
+  height: 100%;
+  width: -webkit-fill-available;
+}
+.modal__content-actions {
+  margin: 10px 0 24px 0;
+}
+.modal__content {
+  padding: 16px;
+  height: 100%;
+  width: 800px;
+  background-color: white;
+}
+.modal__content-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.modal__content-message {
 }
 </style>
