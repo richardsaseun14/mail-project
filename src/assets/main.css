@@ -1,0 +1,21 @@
+@import "./base.css";
+
+#app {
+  font-weight: normal;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-content: center;
+}
+
+.button {
+  padding: 4px 16px;
+  margin: 0;
+}
+
+.button--position-first {
+  margin-right: 20px;
+}
+
+.button--variant-link {
+}
