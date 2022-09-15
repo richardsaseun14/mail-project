@@ -1,4 +1,5 @@
 <script>
+import { mapMutations } from "vuex";
 export default {
   props: {
     title: {
@@ -8,7 +9,7 @@ export default {
       type: String,
     },
     id: {
-      type: String,
+      type: Number,
     },
     isShow: { type: Boolean },
   },
@@ -17,6 +18,11 @@ export default {
     closeModal() {
       this.$emit("closeModal", false);
     },
+    archive() {
+      this.sendArchive(this.id);
+      this.closeModal();
+    },
+    ...mapMutations(["markRead", "sendArchive"]),
   },
 };
 </script>
@@ -27,8 +33,10 @@ export default {
     <div class="modal__content">
       <a class="modal__close" @click="closeModal">Close (Esc)</a>
       <div class="modal__content-actions">
-        <button class="button button--position-first">Mark as read (r)</button>
-        <button class="button">Archive (a)</button>
+        <button class="button button--position-first" @click="markRead(id)">
+          Mark as read (r)
+        </button>
+        <button class="button" @click="archive">Archive (a)</button>
       </div>
       <div class="">
         <h4 class="modal__content-title">{{ title }}</h4>

@@ -53,9 +53,49 @@ const store = createStore({
         }
       });
     },
-    // toggleAll(state, value) {
-    //   state.mails.map((el) => (el.checked = value));
-    // },
+    markRead(state, id) {
+      if (id) {
+        const idx = state.mails.findIndex((el) => el.id === id);
+        state.mails[idx].isRead = true;
+      } else {
+        state.mails = state.mails.map((el) => {
+          if (el.checked) {
+            return { ...el, isRead: true };
+          } else {
+            return { ...el };
+          }
+        });
+      }
+    },
+    sendArchive(state, id) {
+      console.log("🚀 ~ sendArchive ~ id", id);
+      if (id) {
+        const idx = state.mails.findIndex((el) => el.id === id);
+        state.mails[idx].location = "archive";
+      } else {
+        state.mails = state.mails.map((el) => {
+          if (el.checked) {
+            return { ...el, location: "archive" };
+          } else {
+            return { ...el };
+          }
+        });
+      }
+    },
+    sendInbox(state, id) {
+      if (id) {
+        const idx = state.mails.findIndex((el) => el.id === id);
+        state.mails[idx].location = "inbox";
+      } else {
+        state.mails = state.mails.map((el) => {
+          if (el.checked) {
+            return { ...el, location: "inbox" };
+          } else {
+            return { ...el };
+          }
+        });
+      }
+    },
   },
   getters: {
     getMails: (state) => (variant) => {

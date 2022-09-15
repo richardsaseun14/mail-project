@@ -39,7 +39,13 @@ export default {
       this.idx = id;
       this.showModal = true;
     },
-    ...mapMutations(["toggleCheck", "toggleAll"]),
+    ...mapMutations([
+      "toggleCheck",
+      "toggleAll",
+      "markRead",
+      "sendArchive",
+      "sendInbox",
+    ]),
   },
 };
 </script>
@@ -50,8 +56,23 @@ export default {
     <h2 class="layout__subtitle">Emails selected</h2>
     <div class="layout__actions">
       <Checkbox @changed="toggleAll({ value: $event, variant })"></Checkbox>
-      <button class="button button--position-first">Mark as read (r)</button>
-      <button class="button">Archive (a)</button>
+      <button class="button button--position-first" @click="() => markRead()">
+        Mark as read (r)
+      </button>
+      <button
+        v-if="variant === 'inbox'"
+        class="button"
+        @click="() => sendArchive()"
+      >
+        Archive (a)
+      </button>
+      <button
+        v-if="variant === 'archive'"
+        class="button"
+        @click="() => sendInbox()"
+      >
+        Unarchive (u)
+      </button>
     </div>
 
     <ItemMail
@@ -63,6 +84,7 @@ export default {
     ></ItemMail>
 
     <ModalMail
+      v-if="showModal"
       :isShow="showModal"
       @closeModal="showModal = $event"
       v-bind="mails[mails.findIndex((el) => el.id === idx)]"
